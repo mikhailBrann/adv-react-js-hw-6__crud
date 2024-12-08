@@ -1,14 +1,21 @@
 import express from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 const app = express();
 
-//корс заглушка
 app.use(cors());
-//отключение кеширования
-app.enable('view cache');
-app.set('view cache', false);
-app.use(express.json());
+app.use(
+  bodyParser.json({
+    type(req) {
+      return true;
+    },
+  })
+);
+app.use(function (req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
+  next();
+});
 
 const notes = [];
 let nextId = 1;
